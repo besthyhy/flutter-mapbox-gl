@@ -17,6 +17,8 @@ import androidx.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 
+import com.mapbox.android.core.location.LocationEngineCallback;
+import com.mapbox.android.core.location.LocationEngineResult;
 import com.mapbox.mapboxsdk.Mapbox;
 import com.mapbox.mapboxsdk.camera.CameraPosition;
 import com.mapbox.mapboxsdk.camera.CameraUpdate;
@@ -307,6 +309,29 @@ final class MapboxMapController
       updateMyLocationTrackingMode();
       setMyLocationTrackingMode(this.myLocationTrackingMode);
       locationComponent.addOnCameraTrackingChangedListener(this);
+
+      locationComponent.getLocationEngine().getLastLocation(new LocationEngineCallback<LocationEngineResult>() {
+        @Override
+        public void onSuccess(LocationEngineResult result) {
+          Log.i("mylog", "定位成功");
+          Log.i("mylog", result.getLastLocation().getLatitude()+"/");
+          Log.i("mylog", result.getLastLocation().getLongitude()+"/");
+
+
+
+          final Map<String, Object> arguments = new HashMap<>(2);
+
+          arguments.put("lat", result.getLastLocation().getLatitude());
+          arguments.put("lng", result.getLastLocation().getLongitude());
+          methodChannel.invokeMethod("currentLocation", arguments);
+
+        }
+
+        @Override
+        public void onFailure(@NonNull Exception exception) {
+          Log.i("mylog", "定位失败");
+        }
+      });
     } else {
       Log.e(TAG, "missing location permissions");
     }

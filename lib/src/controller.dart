@@ -95,6 +95,8 @@ class MapboxMapController extends ChangeNotifier {
 
   final int _id;
 
+  LatLng currentLatLng=null;
+
   Future<dynamic> _handleMethodCall(MethodCall call) async {
     switch (call.method) {
       case 'infoWindow#onTap':
@@ -150,6 +152,12 @@ class MapboxMapController extends ChangeNotifier {
         if (onCameraTrackingDismissed != null) {
           onCameraTrackingDismissed();
         }
+        break;
+      case 'currentLocation':
+        final double lng = call.arguments['lng'];
+        final double lat = call.arguments['lat'];
+
+        currentLatLng=new LatLng(lat,lng);
         break;
       default:
         throw MissingPluginException();
