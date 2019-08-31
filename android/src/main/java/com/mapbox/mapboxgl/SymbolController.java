@@ -160,7 +160,7 @@ class SymbolController implements SymbolOptionsSink {
 
   @Override
   public void setZIndex(int zIndex) {
-    symbol.setZIndex(zIndex);
+//    symbol.setZIndex(zIndex);
   }
 
   @Override
